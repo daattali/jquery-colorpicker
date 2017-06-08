@@ -6,12 +6,18 @@
   display: table;
   clear: both;
 }
+
 .colourpicker.input-group .colourpicker-input {
   float: none;
 }
+
+.input-group {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAC5JREFUKBVjfPPmzX8GLEBYWBiLKAMDE1ZRPILDQQPjfyDA5se3b99iEx6ZoQQApu4K1mnnCQ0AAAAASUVORK5CYII=');
+}
+
 .colourpicker.input-group.istransparent .colourpicker-input {
   color: transparent !important;
-  background-color: #DDDDDD !important;
+  background-color: transparent !important;
 }
 .colourpicker .colourpicker-input[disabled] {
   background-color: #EEEEEE !important;
@@ -57,17 +63,23 @@
   margin-top: 0;
 }
 .colourpicker .cp-list-col {
+  height: 20px;
+  width: 20px;
+  display:block;
+}
+.colourpicker .cp-list-col-outer {
   width: 20px;
   height: 20px;
   float: left;
   margin-left: 3px;
   border: 1px solid #DDDDDD;
   cursor: pointer;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAC5JREFUKBVjfPPmzX8GLEBYWBiLKAMDE1ZRPILDQQPjfyDA5se3b99iEx6ZoQQApu4K1mnnCQ0AAAAASUVORK5CYII=');
 }
 .colourpicker .cp-list-col:hover {
   border-color: #444444;
 }
-.colourpicker .cp-list-col:first-child {
+.colourpicker .cp-list-col-outer:first-child {
   margin-left: 0;
 }
 .colourpicker .cp-list-col.selected-col.light {
@@ -83,8 +95,6 @@
   width: 150px;
   height: 150px;
   cursor: crosshair;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
-
 }
 .colourpicker .colourpicker-grid-inner {
   width: 100%;
@@ -150,7 +160,7 @@
   width: 20px;
   height: 150px;
   display:none;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAC5JREFUKBVjfPPmzX8GLEBYWBiLKAMDE1ZRPILDQQPjfyDA5se3b99iEx6ZoQQApu4K1mnnCQ0AAAAASUVORK5CYII=')
 }
 
 .colourpicker-with-alpha .colourpicker-alpha-slider {
