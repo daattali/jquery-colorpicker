@@ -195,22 +195,21 @@
           //alpha assumed true for palette = limited, because why would you specifiy it if you don't want
           // to allow it?
           input.data('allow-alpha',true);
-          var rgbstring=rgb2string(rgb,"rgb");
-          var hexstring = rgb2hex(rgb);
-          //if not transparent or NO alpha, need to use a filter on IE
-          if (hexstring.length==9) var filterstring = "filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=#" + hexstring.slice(-2) + hexstring.substr(1,7) + ", endColorstr=#" + hexstring.slice(-2) + hexstring.substr(1,7) + ", GradientType=0 );"
-
-          var hexstring=rgb2hex(rgb);
-          
+          //create string to set the background color
           var hex8string = rgb2hex(rgb,8);
           hex8Allowed.push(hex8string);
-          // if (idx == 0) {
-          //   coloursHtml += '<div class="cp-list-row cp-clearfix">';
-          // } else if (idx % 8 == 0) {
-          //   coloursHtml += '</div><div class="cp-list-row cp-clearfix">';
-          // }
+          var hexstring = rgb2hex(rgb);
+          if (rgb.a===0) {
+            var backgroundstring = "background-color: transparent";
+          }else if (jQuery.support.opacity || rgb.a === 1 || rgb.a === false) {
+            var backgroundstring ="background-color: " + rgb2string(rgb,"rgb");
+          }else {
+            //IE8 with alpha.
+            var backgroundstring = "background-color: " + rgb2string(rgb,"rgb",false) + "; -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity = " + Math.round(rgb.a * 100) + ")';";
+          }
+          
           coloursHtml += '<span class="cp-list-col-outer"><span class="cp-list-col" data-cp-col="' + hexstring +'" ' +
-                            'style="background-color:' + rgbstring + ';' + filterstring +'" + ></span></span>';
+                            'style="' + backgroundstring + '" + ></span></span>';
         });
         // coloursHtml += '</div>';
         input.data('hex8-allowed',hex8Allowed);
@@ -241,6 +240,7 @@
       // If only background colour is shown, don't let the user select the text
       if ( settings.showColour == "background" ) {
         input.attr('readonly', 'readonly');
+        input.on('focus',function() {this.blur()});
       } else {
         input.removeAttr('readonly');
       }
@@ -461,14 +461,37 @@
         case "text":
           input.css('color', '');
           input.css('background-color', '');
+          
           break;
         case "background":
-          input.css('color', "transparent");
-          input.css('background-color', rgb2string(rgb,"rgb"));
+          if (! jQuery.support.opacity) {
+            if ( rgb.a!==false && rgb.a < 1) {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('color',rgb2string(rgb,"rgb",false));
+              input.css('filter','progid:DXImageTransform.Microsoft.Alpha(Opacity = ' + Math.round(rgb.a*100) + ');');
+            }else {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('color',rgb2string(rgb,"rgb",false));
+            }
+          }else {
+            input.css('color', "transparent");
+            input.css('background-color', rgb2string(rgb,"rgb"));
+          }
           break;
         default:
           input.css('color', isColDark(rgb) ? '#ddd' : '#000');
-          input.css('background-color', rgb2string(rgb,"rgb"));
+           if (! jQuery.support.opacity) {
+            if (rgb.a===0) {
+              input.css('background-color','transparent');
+            }else if (rgb.a !== false && rgb.a < 1) {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('filter','progid:DXImageTransform.Microsoft.Alpha(Opacity = ' + Math.round(rgb.a*100) + ');');
+            }else {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+            }
+          }else {
+            input.css('background-color', rgb2string(rgb,"rgb"));
+          }
       }  
       
       // Handle change event
@@ -524,15 +547,38 @@
         case "text":
           input.css('color', '');
           input.css('background-color', '');
+          
           break;
         case "background":
-          input.css('color', "transparent");
-          input.css('background-color', rgb2string(rgb,"rgb"));
+          if (! jQuery.support.opacity) {
+            if ( rgb.a!==false && rgb.a < 1) {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('color',rgb2string(rgb,"rgb",false));
+              input.css('filter','progid:DXImageTransform.Microsoft.Alpha(Opacity = ' + Math.round(rgb.a*100) + ');');
+            }else {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('color',rgb2string(rgb,"rgb",false));
+            }
+          }else {
+            input.css('color', "transparent");
+            input.css('background-color', rgb2string(rgb,"rgb"));
+          }
           break;
         default:
           input.css('color', isColDark(rgb) ? '#ddd' : '#000');
-          input.css('background-color', rgb2string(rgb,"rgb"));
-        }
+           if (! jQuery.support.opacity) {
+            if (rgb.a===0) {
+              input.css('background-color','transparent');
+            }else if (rgb.a !== false && rgb.a < 1) {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+              input.css('filter','progid:DXImageTransform.Microsoft.Alpha(Opacity = ' + Math.round(rgb.a*100) + ');');
+            }else {
+              input.css('background-color',rgb2string(rgb,"rgb",false));
+            }
+          }else {
+            input.css('background-color', rgb2string(rgb,"rgb"));
+          }
+      }  
 
       // Update select colour
       if( settings.palette == 'limited') {
@@ -776,31 +822,31 @@
     function correctedRGB(col) {
       if (!col || isNaN(col.r) || isNaN(col.g) || isNaN(col.b)) return false;
       if (isNaN(col.a)) col.a = false;
-      col.r = Math.round(keepWithin(col.r,0,255));
-      col.g = Math.round(keepWithin(col.g,0,255));
-      col.b = Math.round(keepWithin(col.b,0,255));
-      col.a = col.a ? roundTo(keepWithin(col.a,0,1),2) : col.a;
-      return col;
+      var r = Math.round(keepWithin(col.r,0,255));
+      var g = Math.round(keepWithin(col.g,0,255));
+      var b = Math.round(keepWithin(col.b,0,255));
+      var a = col.a ? roundTo(keepWithin(col.a,0,1),2) : col.a;
+      return {r:r, g:g, b:b, a:a};
     }
     //returns an HSB color with corrected values, or false if broken
     function correctedHSB(col) {
       if (!col || isNaN(col.h) || isNaN(col.s) || isNaN(col.b)) return false;
       if (isNaN(col.a)) col.a = false;
-      col.h = roundTo(keepWithin(col.h,0,360),1);
-      col.s = roundTo(keepWithin(col.s,0,100),1);
-      col.b = roundTo(keepWithin(col.b,0,100),1);
-      col.a = col.a ? keepWithin(col.a,0,1) : col.a;
-      return col;
+      var h = roundTo(keepWithin(col.h,0,360),1);
+      var s = roundTo(keepWithin(col.s,0,100),1);
+      var b = roundTo(keepWithin(col.b,0,100),1);
+      var a = col.a ? keepWithin(col.a,0,1) : col.a;
+      return {h:h, s:s, b:b, a:a};
     }
     //returns an HSL color with corrected values, or false if broken
     function correctedHSL(col) {
       if (!col || isNaN(col.h) || isNaN(col.s) || isNaN(col.l)) return false;
       if (isNaN(col.a)) col.a = false;
-      col.h = roundTo(keepWithin(col.h,0,360),1);
-      col.s = roundTo(keepWithin(col.s,0,100),1);
-      col.l = roundTo(keepWithin(col.l,0,100),1);
-      col.a = col.a ? keepWithin(col.a,0,1) : col.a;
-      return col;
+      h = roundTo(keepWithin(col.h,0,360),1);
+      s = roundTo(keepWithin(col.s,0,100),1);
+      l = roundTo(keepWithin(col.l,0,100),1);
+      a = col.a ? keepWithin(col.a,0,1) : col.a;
+      return {h:h, s:s, l:l, a:a};
     }
     //returns a hexstring with corrected values, or false if broken
     function correctedHex(col, force) {
@@ -1073,6 +1119,8 @@
 
     // Determine if the selected colour is dark or not
     function isColDark(rgb) {
+      rgb = correctedRGB(rgb);
+      if (! rgb) return false;
       if (rgb.a !== false && rgb.a < 0.5) return false;
       return getLuminance(rgb) > 0.22 ? false : true;
     }
@@ -1114,8 +1162,11 @@
       }
     })
     // Click on a colour from a limited-selection palette
-    .on('mousedown.colourpicker touchstart.colourpicker', '.cp-list-col', function(event) {
+    .on('mousedown.colourpicker touchstart.colourpicker', '.cp-list-col, .cp-list-col-outer', function(event) {
       var target = $(this);
+      if (target.hasClass('cp-list-col-outer')) {
+        target = target.find('.cp-list-col');
+      }
       event.preventDefault();
       var input = target.parents('.colourpicker').find('.colourpicker-input');
       updateFromControl(input, target);

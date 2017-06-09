@@ -66,6 +66,11 @@
     {palette: "limited", allowAlpha: false, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow","#12323480", "rgba(132, 167, 23, .7)"]}<br>(note allowAlpha=false is ignored because if you didn't want to allow it, why woiuld you include colors with alpha values?)<br>   Value: <span></span>
     <input type="text" id="col8" class="form-control my-cp" value = "#abc123">
   </div>
+  </div><div>
+    {allowAlpha: true, showColour: "background", allowTransparent: true, returnName: true}<Br>
+    Value: <span></span>
+    <input type="text" id="col9" class="form-control my-cp">
+  </div>
 
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -81,8 +86,9 @@
 	  $("#col4").colourpicker({palette : "limited", returnName: true});
     $("#col5").colourpicker({allowAlpha: true, showColour: "text"});
     $("#col6").colourpicker({allowAlpha: true, showColour: "both"});
-    $('#col7').colourpicker({palette: "limited", allowAlpha: true, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow"]})
-    $('#col8').colourpicker({palette: "limited", allowAlpha: false, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow","#12323480", "rgba(132, 167, 23, .7)"]})
+    $('#col7').colourpicker({palette: "limited", allowAlpha: true, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow"]});
+    $('#col8').colourpicker({palette: "limited", allowAlpha: false, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow","#12323480", "rgba(132, 167, 23, .7)"]});
+    $("#col9").colourpicker({allowAlpha: true, showColour: "background", allowTransparent: true, returnName: true});
 
     
     $.each($(".my-cp"), function(i, el) {
