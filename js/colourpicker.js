@@ -145,16 +145,15 @@
       // Handle settings
       settings = $.extend(false, {}, defaults, settings);
 
-	    // Palette type
+	    // Palette type, alpha or not, make it an input group.
+      var wide = settings.allowAlpha;
+      if (settings.palette=="limited") wide = false;
 	    colourpicker
        .addClass('palette-' + settings.palette)
-       .toggleClass('colourpicker-with-alpha',settings.allowAlpha);
-	  
-	    // If adding a transparent checkbox, make the parent an input group
-      //if( settings.allowTransparent ) {
-        colourpicker.addClass('input-group');
-      //}
-
+       .toggleClass('colourpicker-with-alpha',wide)
+       .addClass('input-group');
+     
+       //save some important settings
       input.data('allow-alpha', settings.allowAlpha);
       input.data('palette-type',settings.palette);
       // The input
@@ -174,12 +173,12 @@
             '<div class="colourpicker-slider colourpicker-sprite">' +
               '<div class="colourpicker-slider-picker"></div>' +
             '</div>' +
-            '<div class="colourpicker-alpha-slider colourpicker-sprite">' +
+            '<div class="colourpicker-alpha-slider">' +
               '<div class="colourpicker-alpha-inner-slider"></div>' +
               '<div class="colourpicker-slider-picker"></div>' +
             '</div>' +
-            '<div class="colourpicker-grid colourpicker-sprite">' +
-              '<div class="colourpicker-grid-inner">' +
+            '<div class="colourpicker-grid">' +
+              '<div class="colourpicker-grid-inner colourpicker-sprite">' +
                 '<div class="colourpicker-grid-inner-2"></div>' +
               '</div>' +
               '<div class="colourpicker-picker">' +
@@ -196,8 +195,11 @@
           //alpha assumed true for palette = limited, because why would you specifiy it if you don't want
           // to allow it?
           input.data('allow-alpha',true);
-          //if (!settings.allowAlpha) rgb.a=false;
           var rgbstring=rgb2string(rgb,"rgb");
+          var hexstring = rgb2hex(rgb);
+          //if not transparent or NO alpha, need to use a filter on IE
+          if (hexstring.length==9) var filterstring = "filter:progid:DXImageTransform.Microsoft.gradient( startColorstr=#" + hexstring.slice(-2) + hexstring.substr(1,7) + ", endColorstr=#" + hexstring.slice(-2) + hexstring.substr(1,7) + ", GradientType=0 );"
+
           var hexstring=rgb2hex(rgb);
           
           var hex8string = rgb2hex(rgb,8);
@@ -207,8 +209,8 @@
           // } else if (idx % 8 == 0) {
           //   coloursHtml += '</div><div class="cp-list-row cp-clearfix">';
           // }
-          coloursHtml += '<span class="cp-list-col-outer"><span class="cp-list-col" title="' + hexstring + '" data-cp-col="' + hexstring +'" ' +
-                            'style="background-color:' + rgbstring + '"></span></span>';
+          coloursHtml += '<span class="cp-list-col-outer"><span class="cp-list-col" data-cp-col="' + hexstring +'" ' +
+                            'style="background-color:' + rgbstring + ';' + filterstring +'" + ></span></span>';
         });
         // coloursHtml += '</div>';
         input.data('hex8-allowed',hex8Allowed);
@@ -427,7 +429,9 @@
         if (alpha !== false) {
           var rgbstring = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",";
           var lgradstring = "linear-gradient(" + rgbstring + "1) 0, " + rgbstring + "0) 100%)";
+          var filterstring = "progid:DXImageTransform.Microsoft.gradient( startColorstr=#FF" + hex.substr(1,7) + ", endColorstr=#00000000, GradientType=0 );"
           alphainnerslider.css('background',lgradstring);
+          alphainnerslider.css('filter',filterstring);
           //code below makes the picker grid transparent, currently disabled.
           // //Update alpha
           // innergrid.css('opacity',alpha);
@@ -558,7 +562,9 @@
         //innergrid.css('opacity',alpha);
         var rgbstring = "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",";
         var lgradstring = "linear-gradient(" + rgbstring + "1) 0, " + rgbstring + "0) 100%)";
+        var filterstring = "progid:DXImageTransform.Microsoft.gradient( startColorstr=#FF" + hex.substr(1,7) + ", endColorstr=#00000000, GradientType=0 );"
         alphainnerslider.css('background',lgradstring);
+        alphainnerslider.css('filter',filterstring);
         //set alpha slider position
         y = keepWithin(alphaslider.height() - (alpha / (1 / alphaslider.height())),0,alphaslider.height());
         alphapicker.css('top',y+'px');
@@ -647,7 +653,7 @@
     //roundTo function
 
     function roundTo(num,dec) {
-      return Math.round(num *  10 ** dec) / (10 ** dec);
+      return Math.round(num *  Math.pow(10,dec)) / (Math.pow(10,dec));
     }
 
         // regex matchers for str2rgb below
@@ -797,7 +803,8 @@
       return col;
     }
     //returns a hexstring with corrected values, or false if broken
-    function correctedHex(col,force=false) {
+    function correctedHex(col, force) {
+      if (force === undefined) force = 0;
       if ($.type(col) !== "string") return false;
       col = col.toUpperCase()
       //strip all non-hex characters including # sign
@@ -818,7 +825,10 @@
     }
 
     //convert RGB to string of the selected format
-    function rgb2string(rgb, format="hex",alpha=true,fallback="hex") {
+    function rgb2string(rgb, format,alpha,fallback) {
+      if (format === undefined) format = "hex";
+      if (alpha === undefined) alpha = true;
+      if (fallback === undefined) fallback = "hex";
       rgb = correctedRGB(rgb);
       if (alpha===false) rgb.a = false;
       switch (format) {
@@ -866,7 +876,8 @@
     // for non-alpha situations, HSL, HSV/B, and RGB all return a=false
     // hex returns hex6 or hex8 based on alpha
 
-    function rgb2hex(rgb,force=0) {
+    function rgb2hex(rgb, force) {
+      if (force === undefined) force = 0;
       rgb = correctedRGB(rgb); 
       if (!rgb) return "";     
       var a;
@@ -994,7 +1005,8 @@
     function hsb2name(hsb) {
       return hex2name(hsb2hex(hsb,8));
     }
-    function hsb2hex(hsb,force=0) {
+    function hsb2hex(hsb,force) {
+      if (force === undefined) force = 0;
       return rgb2hex(hsb2rgb(hsb),force);
     }
     function hex2hsb(hex) {
