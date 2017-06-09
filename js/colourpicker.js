@@ -202,15 +202,15 @@
           
           var hex8string = rgb2hex(rgb,8);
           hex8Allowed.push(hex8string);
-          if (idx == 0) {
-            coloursHtml += '<div class="cp-list-row cp-clearfix">';
-          } else if (idx % 8 == 0) {
-            coloursHtml += '</div><div class="cp-list-row cp-clearfix">';
-          }
+          // if (idx == 0) {
+          //   coloursHtml += '<div class="cp-list-row cp-clearfix">';
+          // } else if (idx % 8 == 0) {
+          //   coloursHtml += '</div><div class="cp-list-row cp-clearfix">';
+          // }
           coloursHtml += '<span class="cp-list-col-outer"><span class="cp-list-col" title="' + hexstring + '" data-cp-col="' + hexstring +'" ' +
                             'style="background-color:' + rgbstring + '"></span></span>';
         });
-        coloursHtml += '</div>';
+        // coloursHtml += '</div>';
         input.data('hex8-allowed',hex8Allowed);
         
         input
