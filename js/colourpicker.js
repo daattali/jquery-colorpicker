@@ -144,7 +144,10 @@
 
       // Handle settings
       settings = $.extend(false, {}, defaults, settings);
-
+      //for backwards compatibility
+      if ($.type(settings.allowedCols) === "string") {
+        settings.allowedCols = settings.allowedCols.split(" ");
+      }
 	    // Palette type, alpha or not, make it an input group.
       var wide = settings.allowAlpha;
       if (settings.palette=="limited") wide = false;
