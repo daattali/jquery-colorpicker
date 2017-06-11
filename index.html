@@ -15,33 +15,35 @@
     body {
       padding: 30px;
     }
-    .form-control {
+    /*.form-control {
       width: 300px;
-    }
+    }*/
     .colourpicker {
       margin-top: 3px;
       margin-bottom: 20px;
+      width: 30%;
     }
-    .input-group {
+
+/*    .input-group {
       width: 300px;
-    }
+    }*/
   </style>
 </head>
 
 <body>
 
   <div>
-    Default settings
+    Default settings (width set in CSS to 300px)
     <br> Value: <span></span>
     <input type="text" id="col1" class="form-control my-cp">
   </div>
   <div>
-    {showColour: background}
+    {showColour: background} input width=100px;
     <br> Value: <span></span>
     <input type="text" id="col2" class="form-control my-cp" value="#ff0000">
   </div>
   <div>
-    {allowTransparent: true}
+    {allowTransparent: true} input width=20%
     <Br> Value: <span></span>
     <input type="text" id="col3" class="form-control my-cp" value="#abc123">
   </div>
@@ -61,19 +63,20 @@
     <input type="text" id="col6" class="form-control my-cp">
   </div>
   <div>
-    {palette: "limited", allowAlpha: true, returnName: true, allowedCols: [transparent, red, green, blue, yellow]}
+    {palette: "limited", allowAlpha: true, returnName: true, <br>
+    allowedCols: ["transparent", "red'", "green", "blue", "yellow"]}
     <br> Value: <span></span>
     <input type="text" id="col7" class="form-control my-cp" value="#ff0000">
   </div>
   <div>
-    {palette: "limited", allowAlpha: false, returnName: true, allowedCols: ["transparent", "red", "green", "blue", "yellow","#12323480", "rgba(132, 167, 23, .7)"]}
-    <br>(note allowAlpha=false is ignored because if you didn't want to allow it, why woiuld you include colors with alpha values?)
+    {palette: "limited", allowAlpha: false, returnName: true, <br>
+    allowedCols: ["transparent", "red", "green", "blue", "yellow","#12323480", "rgba(132, 167, 23, .7)"]}
     <br> Value: <span></span>
     <input type="text" id="col8" class="form-control my-cp" value="#abc123">
   </div>
   <div>
     {allowAlpha: true, showColour: "background", allowTransparent: true, returnName: true}
-    <Br> Value: <span></span>
+    <br> Value: <span></span>
     <input type="text" id="col9" class="form-control my-cp">
   </div>
 
@@ -127,12 +130,12 @@
 
     $.each($(".my-cp"), function(i, el) {
       var value = $(el).colourpicker('value');
-      $($(el).parents('.colourpicker').parent().find("span")[0]).text(value);
+      $($(el).closest('.colourpicker').parent().find("span")[0]).text(value);
     });
 
     $(document).on("change", ".my-cp", function(e) {
       var value = $(e.target).colourpicker('value');
-      $($(e.target).parents('.colourpicker').parent().find("span")[0]).text(value);
+      $($(e.target).closest('.colourpicker').parent().find("span")[0]).text(value);
     });
   </script>
 </body>
