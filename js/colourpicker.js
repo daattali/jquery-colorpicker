@@ -271,7 +271,7 @@
     // Returns the input back to its original state
     function destroy(input) {
 
-      var colourpicker = input.parents('colourpicker');
+      var colourpicker = input.parents('.colourpicker');
 
       // Revert the input element
       input
