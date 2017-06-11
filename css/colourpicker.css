@@ -50,12 +50,12 @@
 }
 
 .palette-square .colourpicker-panel {
-  width: 174px;
+  width: 173px;
   height: 152px;
 }
 
 .palette-square.colourpicker-with-alpha .colourpicker-panel {
-  width: 196px;
+  width: 194px;
 }
 
 .palette-limited .colourpicker-panel {
