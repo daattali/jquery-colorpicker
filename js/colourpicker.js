@@ -159,12 +159,11 @@
       .addClass('palette-' + settings.palette)
       .toggleClass('colourpicker-with-alpha',wide);
       
-       // save some important settings
-       input.data('allow-alpha', settings.allowAlpha);
-       input.data('palette-type',settings.palette);
-      
-       //set the input container width to the same as the input
+      // save some important settings
+      input.data('allow-alpha', settings.allowAlpha);
+      input.data('palette-type',settings.palette);
 
+      // set the input container width to the same as the input
       inputcontainer.css('width', inputwidth);
       // The input
       input
