@@ -15,7 +15,7 @@
     body {
       padding: 30px;
     }
-    
+
     .colourpicker {
       margin-top: 3px;
       margin-bottom: 20px;
@@ -33,7 +33,7 @@
     <input type="text" id="col1" class="form-control my-cp">
   </div>
   <div>
-    {showColour: background}
+    {showColour: background, closeOnClick: true}
     <br> Value: <span></span>
     <input type="text" id="col2" class="form-control my-cp" value="#ff0000">
   </div>
@@ -59,7 +59,8 @@
   </div>
   <div>
     {palette: "limited", allowAlpha: true, returnName: true, <br>
-    allowedCols: ["transparent", "red", "green", "blue", "yellow"]}
+    allowedCols: ["transparent", "red", "green", "blue", "yellow"], <br>
+    closeOnClick: true}
     <br> Value: <span></span>
     <input type="text" id="col7" class="form-control my-cp" value="#ff0000">
   </div>
@@ -85,7 +86,8 @@
   <script>
     $("#col1").colourpicker();
     $("#col2").colourpicker({
-      showColour: "background"
+      showColour: "background",
+      closeOnClick: true
     });
     $("#col3").colourpicker({
       allowTransparent: true,
@@ -107,7 +109,8 @@
       palette: "limited",
       allowAlpha: true,
       returnName: true,
-      allowedCols: ["transparent", "red", "green", "blue", "yellow"]
+      allowedCols: ["transparent", "red", "green", "blue", "yellow"],
+      closeOnClick: true
     });
     $('#col8').colourpicker({
       palette: "limited",
