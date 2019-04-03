@@ -1127,7 +1127,8 @@
       }
     })
     // Click on a colour from a limited-selection palette
-    .on('mousedown.colourpicker touchstart.colourpicker', '.cp-list-col, .cp-list-col-outer', function(event) {
+    .on('mousedown.colourpicker touchstart.colourpicker',
+        '.cp-list-col, .cp-list-col-outer', function(event) {
       var target = $(this);
       if (target.hasClass('cp-list-col-outer')) {
         target = target.find('.cp-list-col');
@@ -1137,14 +1138,16 @@
       updateFromControl(input, target);
     })
     // Start moving in a palette
-    .on('mousedown.colourpicker touchstart.colourpicker', '.colourpicker-grid, .colourpicker-slider, .colourpicker-alpha-slider', function(event) {
+    .on('mousedown.colourpicker touchstart.colourpicker',
+        '.colourpicker-grid, .colourpicker-slider, .colourpicker-alpha-slider', function(event) {
       var target = $(this);
       event.preventDefault();
       $(document).data('colourpicker-target', target);
       move(target, event, true);
     })
     // Move pickers
-    .on('mousemove.colourpicker touchmove.colourpicker', function(event) {
+    .on('mousemove.colourpicker touchmove.colourpicker',
+        '.colourpicker-panel', function(event) {
       var target = $(document).data('colourpicker-target');
       if( target ) move(target, event);
     })
@@ -1153,7 +1156,7 @@
       $(this).removeData('colourpicker-target');
     })
     // After choosing a colour, close the panel
-    .on('mouseup.colourpickerCloseClick touchend.colourpickerCloseClick',
+    .on('mouseup.colourpicker touchend.colourpicker',
         '.colourpicker-grid, .cp-list-col, .cp-list-col-outer', function() {
       var target = $(this);
       var input = target.closest('.colourpicker').find('.colourpicker-input');
