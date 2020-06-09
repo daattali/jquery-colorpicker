@@ -6,7 +6,7 @@
   * Cory LaViska for A Beautiful Site, LLC: http://www.abeautifulsite.net/
   * David Griswold http://davidgriswoldhh.mtbos.org/ (allowing alpha colours)
   *
-  * Version: 1.5
+  * Version: 1.6
   *
   * Contribute: https://github.com/daattali/jquery-colourpicker
   *
